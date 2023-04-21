@@ -44,6 +44,10 @@
 						console.log('success');
 					}
 				});
+				this.sliderCount++
+				if (this.sliderCount > 40) {
+					this.speakerVibrate("不要划着玩^_^")
+				}
 			}
 		},
 		mounted() {
@@ -89,10 +93,6 @@
 			},
 			sliderChanging: function(event) {
 				this.minute = event.detail.value
-				this.sliderCount++
-				if (this.sliderCount > 200) {
-					this.speakerVibrate("不要划着玩^_^")
-				}
 			},
 			sliderChange: function(event) {
 				this.sliderCount = 0

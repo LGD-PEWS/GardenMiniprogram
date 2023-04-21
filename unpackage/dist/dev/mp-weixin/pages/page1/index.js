@@ -26,6 +26,10 @@ const _sfc_main = {
           console.log("success");
         }
       });
+      this.sliderCount++;
+      if (this.sliderCount > 40) {
+        this.speakerVibrate("不要划着玩^_^");
+      }
     }
   },
   mounted() {
@@ -66,10 +70,6 @@ const _sfc_main = {
     },
     sliderChanging: function(event) {
       this.minute = event.detail.value;
-      this.sliderCount++;
-      if (this.sliderCount > 200) {
-        this.speakerVibrate("不要划着玩^_^");
-      }
     },
     sliderChange: function(event) {
       this.sliderCount = 0;
