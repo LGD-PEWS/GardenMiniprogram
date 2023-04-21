@@ -1,0 +1,1 @@
+<view class="container"><view class="uni-flex uni-row"><view bindtap="{{a}}" class="text tree" style="{{'box-shadow:' + b}}">固定宽度 </view><view bindtap="{{c}}" class="text tree" style="{{'box-shadow:' + d}}">固定宽度 </view><view bindtap="{{e}}" class="text tree" style="{{'box-shadow:' + f}}">固定宽度 </view></view></view>
