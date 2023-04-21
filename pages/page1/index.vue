@@ -29,7 +29,11 @@
 				startBtn: true,
 				giveupBtn: false,
 				// 滑动计数
-				sliderCount: 0
+				sliderCount: 0,
+				// 电池电量检测
+				betteryIsChecked: false,
+				// 电池充电检测
+				betteryIsChargingIsChecked: false
 			}
 		},
 		watch: {
@@ -44,15 +48,16 @@
 		},
 		mounted() {
 			this.speakerText = ["全是bug...", "怎么回事呢...", "好想玩...", "我来讲个鬼故事..."];
+			// 获取电池电量
+			setInterval(() => {
+				this.getBattery()
+			}, 5000)
 		},
 		methods: {
 			start: function() {
 				// 如果没拖拽进度条，直接返回
 				if (this.minute == 0) {
-					uni.showToast({
-						title: '请先设置时间',
-						icon: "error"
-					});
+					this.speakerVibrate(["请先设置时间!", "请先设置时间!!", "请先设置时间!!!"])
 					return
 				}
 				// 显示 放弃 按钮
@@ -71,16 +76,15 @@
 						return
 					}
 				}, 1000)
-				this.speakerTimer = setInterval(() => {
-					this.speaker = this.speakerText[Math.floor(Math.random() * this.speakerText.length)];
-				}, 8000)
+				// 正常说话
+				this.speakerNormal()
 			},
 			giveup: function() {
 				this.giveupBtn = false;
 				this.startBtn = true;
 				this.minute = 0;
 				this.second = 0;
-				this.speaker = "开始吧...";
+				this.speakerReset()
 				clearInterval(this.speakerTimer);
 			},
 			sliderChanging: function(event) {
@@ -92,31 +96,74 @@
 			},
 			sliderChange: function(event) {
 				this.sliderCount = 0
-				this.speaker = "开始吧...";
+				this.speakerReset()
 				this.minute = event.detail.value
 			},
 			clickSpeaker: function() {
 				this.sliderCount++
-				if (this.sliderCount == 18) {
-					this.speakerVibrate("再见 XD")
-					setTimeout(() => {
-						this.wxExitMiniProgram()
-					}, 1000)
+				if (this.sliderCount == 20) {
+					// 关闭小程序
+					wx.exitMiniProgram()
+				} else if (this.sliderCount == 18) {
+					this.speakerVibrate("再见 XD", 100000000)
 				} else if (this.sliderCount == 10) {
 					this.speakerVibrate("再点我要生气了")
 				} else if (this.sliderCount == 4) {
 					this.speakerVibrate("别点我了 :D")
 				}
 			},
-			speakerVibrate: function(text) {
-				this.speaker = text;
-				uni.vibrateShort({
+			speakerVibrate: function(text, time) {
+				if (typeof text == "string") {
+					this.speaker = text;
+				}
+				if (typeof text == "object") {
+					this.speaker = text[Math.floor(Math.random() * text.length)];
+				}
+				// 短震动
+				uni.vibrateShort({})
+				if (!this.startBtn) {
+					// 停止说正常的话
+					clearInterval(this.speakerTimer);
+					// 五秒后说正常的话
+					this.speakerTimer = setTimeout(() => {
+						this.speakerNormal()
+					}, time ? time : 3000)
+				} else {
+					clearInterval(this.speakerTimer);
+					this.speakerTimer = setTimeout(() => {
+						this.speakerReset()
+					}, time ? time : 3000)
 
-				})
+				}
 			},
-			wxExitMiniProgram: function() {
-				console.log("我被执行了")
-				wx.exitMiniProgram()
+			speakerReset: function() {
+				this.speaker = "开始吧...";
+			},
+			// 正常说话
+			speakerNormal: function() {
+				this.speakerTimer = setInterval(() => {
+					this.speaker = this.speakerText[Math.floor(Math.random() * this.speakerText.length)];
+				}, 8000)
+			},
+			getBattery: function() {
+				uni.getBatteryInfo({
+					success: (res) => {
+						if (res.level <= 20 && !res.isCharging && !this.betteryIsChecked) {
+							this.speakerVibrate("快要没电了...")
+						}
+						if (res.level <= 20 && res.isCharging && !this.betteryIsChargingIsChecked) {
+							this.speakerVibrate("好耶有电了！")
+							this.betteryIsChargingIsChecked = true
+							// 
+							this.betteryIsChecked = true
+						}
+						// 充电充到80%以上，会重置检测机制
+						if (res.level >= 80) {
+							this.betteryIsChecked = false
+							this.betteryIsChargingIsChecked = false
+						}
+					}
+				})
 			}
 		}
 	}
