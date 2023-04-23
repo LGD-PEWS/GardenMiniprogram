@@ -4,23 +4,13 @@ const _sfc_main = {
   data() {
     return {
       usePlant: "0",
-      list: [
-        {
-          url: "/static/plants/plant0.png",
-          gold: "0"
-        },
-        {
-          url: "/static/plants/plant1.png",
-          gold: "5"
-        }
-      ],
-      gold: "0"
+      list: []
     };
   },
   onLoad() {
-    common_vendor.index.$on("getGold", (res) => {
-      console.log("getGold", res.gold);
-      this.gold += res.gold;
+    common_vendor.index.$on("newGardenPlant", (res) => {
+      console.log("newGardenPlant", res);
+      this.list.push(res);
     });
   },
   methods: {
@@ -32,9 +22,6 @@ const _sfc_main = {
       });
       console.log("clickTree", e);
       this.usePlant = e;
-      common_vendor.index.$emit("useThisPlant", {
-        url: `/static/plants/plant${e}.png`
-      });
     }
   }
 };
@@ -56,7 +43,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         b: common_vendor.o(($event) => $options.clickTree(index), index),
         c: $data.usePlant == index ? " 0 0 0 5rpx #5F8D4E" : "",
         d: index,
-        e: "cf0c6d00-1-" + i0 + ",cf0c6d00-0",
+        e: "2d5e7c41-1-" + i0 + ",2d5e7c41-0",
         f: common_vendor.p({
           index
         })
@@ -69,5 +56,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "C:/Users/Sylvie/Documents/HBuilderProjects/miniprogram/pages/page2/index.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "C:/Users/Sylvie/Documents/HBuilderProjects/miniprogram/pages/page3/index.vue"]]);
 wx.createPage(MiniProgramPage);

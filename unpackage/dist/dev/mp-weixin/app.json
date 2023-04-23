@@ -1,7 +1,8 @@
 {
   "pages": [
     "pages/page1/index",
-    "pages/page2/index"
+    "pages/page2/index",
+    "pages/page3/index"
   ],
   "window": {
     "navigationBarBackgroundColor": "#A4BE7B",
@@ -21,7 +22,11 @@
       },
       {
         "pagePath": "pages/page2/index",
-        "text": "植物"
+        "text": "商店"
+      },
+      {
+        "pagePath": "pages/page3/index",
+        "text": "花园"
       }
     ]
   },

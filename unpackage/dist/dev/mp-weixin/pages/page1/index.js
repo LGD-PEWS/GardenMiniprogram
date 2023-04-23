@@ -6,6 +6,7 @@ const _sfc_main = {
     return {
       speaker: "开始吧...",
       speakerText: [],
+      timer: "",
       speakerTimer: "",
       minute: 0,
       second: 0,
@@ -18,7 +19,11 @@ const _sfc_main = {
       // 电池充电检测
       betteryIsChargingIsChecked: false,
       plantUrl: "/static/plants/plant0.png",
-      plant: "/static/plants/plant0.png"
+      plant: "/static/plants/plant0.png",
+      // 手机战斗力
+      benchmarkLevel: "0",
+      // 植物年龄
+      age: 0
     };
   },
   onLoad() {
@@ -51,7 +56,13 @@ const _sfc_main = {
     }
   },
   mounted() {
-    this.speakerText = ["全是bug...", "怎么回事呢...", "好想玩...", "我来讲个鬼故事..."];
+    common_vendor.wx$1.getSystemInfo({
+      success(res) {
+        this.benchmarkLevel = res.benchmarkLevel;
+        console.log("手机战斗力", res.benchmarkLevel);
+      }
+    });
+    this.speakerText = ["全是bug...", "怎么回事呢...", "好想玩...", "我来讲个鬼故事...", `您的手机战斗力:${this.benchmarkLevel}`];
     setInterval(() => {
       this.getBattery();
     }, 5e3);
@@ -64,21 +75,29 @@ const _sfc_main = {
       }
       this.startBtn = false;
       this.giveupBtn = true;
-      let timer = setInterval(() => {
+      this.timer = setInterval(() => {
         if (this.second > 0) {
           this.second--;
         } else if (this.second == 0 && this.minute > 0) {
           this.minute--;
           this.second = 59;
         } else {
+          common_vendor.index.$emit("newGardenPlant", {
+            url: this.plant,
+            time: this.getTime(),
+            age: this.age
+          });
+          common_vendor.index.$emit("getGold", {
+            gold: this.age
+          });
           this.giveup();
-          clearInterval(timer);
           return;
         }
       }, 1e3);
       this.speakerNormal();
     },
     giveup: function() {
+      clearInterval(this.timer);
       this.giveupBtn = false;
       this.startBtn = true;
       this.minute = 0;
@@ -155,6 +174,13 @@ const _sfc_main = {
     },
     random: function(array) {
       return array[Math.floor(Math.random() * array.length)];
+    },
+    getTime: function() {
+      var date = new Date(), year = date.getFullYear(), month = date.getMonth() + 1, day = date.getDate(), hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(), minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(), second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+      month >= 1 && month <= 9 ? month = "0" + month : "";
+      day >= 0 && day <= 9 ? day = "0" + day : "";
+      var timer = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+      return timer;
     }
   }
 };
@@ -184,13 +210,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       highlight: false,
       showBorder: false
     }),
-    i: $data.minute,
-    j: common_vendor.o((...args) => $options.sliderChange && $options.sliderChange(...args)),
-    k: common_vendor.o((...args) => $options.sliderChanging && $options.sliderChanging(...args)),
-    l: $data.startBtn,
-    m: common_vendor.o((...args) => $options.start && $options.start(...args)),
-    n: $data.giveupBtn,
-    o: common_vendor.o((...args) => $options.giveup && $options.giveup(...args))
+    i: !$data.startBtn,
+    j: $data.minute,
+    k: common_vendor.o((...args) => $options.sliderChange && $options.sliderChange(...args)),
+    l: common_vendor.o((...args) => $options.sliderChanging && $options.sliderChanging(...args)),
+    m: $data.startBtn,
+    n: common_vendor.o((...args) => $options.start && $options.start(...args)),
+    o: $data.giveupBtn,
+    p: common_vendor.o((...args) => $options.giveup && $options.giveup(...args))
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "C:/Users/Sylvie/Documents/HBuilderProjects/miniprogram/pages/page1/index.vue"]]);

@@ -1,0 +1,31 @@
+
+page {
+		/* 页面背景色 */
+		background-color: #A4BE7B;
+}
+.grid-item-box {
+		border-radius: 50%;
+		flex: 1;
+		/* position: relative; */
+
+		display: flex;
+
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 15px 0;
+		margin: 15rpx;
+}
+.container {
+		padding: 20px;
+		font-size: 14px;
+		line-height: 24px;
+}
+.text {
+		font-size: 14px;
+		margin-top: 5px;
+}
+.image {
+		width: 80rpx;
+		height: 80rpx;
+}

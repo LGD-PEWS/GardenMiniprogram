@@ -12,8 +12,8 @@
 				</view>
 			</uni-grid-item>
 		</uni-grid>
-		<slider :value="minute" step="5" class="slider" max="120" @change="sliderChange" @changing="sliderChanging"
-			activeColor="#5F8D4E" backgroundColor="#E5D9B6" block-color="#5F8D4E" />
+		<slider :disabled="!startBtn" :value="minute" step="5" class="slider" max="120" @change="sliderChange"
+			@changing="sliderChanging" activeColor="#5F8D4E" backgroundColor="#E5D9B6" block-color="#5F8D4E" />
 		<button v-show="startBtn" class="buttonStart" type="default" plain="true" @click="start">开 始</button>
 		<button v-show="giveupBtn" class="button" type="default" plain="true" @click="giveup">放 弃</button>
 	</view>
@@ -25,6 +25,7 @@
 			return {
 				speaker: "开始吧...",
 				speakerText: [],
+				timer: "",
 				speakerTimer: "",
 				minute: 0,
 				second: 0,
@@ -37,7 +38,11 @@
 				// 电池充电检测
 				betteryIsChargingIsChecked: false,
 				plantUrl: "/static/plants/plant0.png",
-				plant: "/static/plants/plant0.png"
+				plant: "/static/plants/plant0.png",
+				// 手机战斗力
+				benchmarkLevel: "0",
+				// 植物年龄
+				age: 0
 			}
 		},
 		onLoad() {
@@ -73,7 +78,13 @@
 			}
 		},
 		mounted() {
-			this.speakerText = ["全是bug...", "怎么回事呢...", "好想玩...", "我来讲个鬼故事..."];
+			wx.getSystemInfo({
+				success(res) {
+					this.benchmarkLevel = res.benchmarkLevel
+					console.log("手机战斗力", res.benchmarkLevel)
+				}
+			})
+			this.speakerText = ["全是bug...", "怎么回事呢...", "好想玩...", "我来讲个鬼故事...", `您的手机战斗力:${this.benchmarkLevel}`];
 			// 获取电池电量
 			setInterval(() => {
 				this.getBattery()
@@ -90,15 +101,25 @@
 				this.startBtn = false;
 				this.giveupBtn = true;
 				// 开始计时
-				let timer = setInterval(() => {
+				this.timer = setInterval(() => {
 					if (this.second > 0) {
 						this.second--
 					} else if (this.second == 0 && this.minute > 0) {
 						this.minute--
 						this.second = 59
 					} else {
+						// 种植完成，将种植时间，植物年龄，品种 发送给页面3
+						uni.$emit('newGardenPlant', {
+							url: this.plant,
+							time: this.getTime(),
+							age: this.age
+						});
+						// 将金币发送给页面2
+						uni.$emit('getGold', {
+							gold: this.age
+						});
+						// 重置
 						this.giveup()
-						clearInterval(timer);
 						return
 					}
 				}, 1000)
@@ -106,6 +127,7 @@
 				this.speakerNormal()
 			},
 			giveup: function() {
+				clearInterval(this.timer);
 				this.giveupBtn = false;
 				this.startBtn = true;
 				this.minute = 0;
@@ -193,6 +215,19 @@
 			},
 			random: function(array) {
 				return array[Math.floor(Math.random() * array.length)];
+			},
+			getTime: function() {
+				var date = new Date(),
+					year = date.getFullYear(),
+					month = date.getMonth() + 1,
+					day = date.getDate(),
+					hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
+					minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(),
+					second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+				month >= 1 && month <= 9 ? (month = "0" + month) : "";
+				day >= 0 && day <= 9 ? (day = "0" + day) : "";
+				var timer = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+				return timer;
 			}
 		}
 	}
@@ -215,7 +250,7 @@
 		margin-top: 40rpx;
 		margin-bottom: 200rpx;
 		padding: 0 20rpx;
-		background-color: #5F8D4E;
+		/* background-color: #5F8D4E; */
 		height: 70rpx;
 		line-height: 70rpx;
 		text-align: center;

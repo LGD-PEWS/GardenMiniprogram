@@ -16,23 +16,16 @@
 		data() {
 			return {
 				usePlant: "0",
-				list: [{
-						url: '/static/plants/plant0.png',
-						gold: "0"
-					},
-					{
-						url: '/static/plants/plant1.png',
-						gold: '5',
-					},
-				],
-				gold: "0"
+				list: []
 			}
 		},
 		onLoad() {
 			// 监听事件
-			uni.$on('getGold', res => {
-				console.log("getGold", res.gold); // =>"掘金" res即emitData携带的对象
-				this.gold += res.gold
+			uni.$on('newGardenPlant', res => {
+				console.log("newGardenPlant", res); // =>"掘金" res即emitData携带的对象
+				this.list.push(res)
+				// this.plantUrl = res.url
+				// this.plant = res.url
 			});
 		},
 		methods: {
@@ -45,9 +38,9 @@
 				});
 				console.log("clickTree", e)
 				this.usePlant = e;
-				uni.$emit('useThisPlant', {
-					url: `/static/plants/plant${e}.png`,
-				});
+				// uni.$emit('useThisPlant', {
+				// 	url: `/static/plants/plant${e}.png`,
+				// });
 			}
 		}
 	}

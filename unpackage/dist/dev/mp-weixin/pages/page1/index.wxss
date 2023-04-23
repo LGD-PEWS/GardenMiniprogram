@@ -13,7 +13,7 @@ page {
 		margin-top: 40rpx;
 		margin-bottom: 200rpx;
 		padding: 0 20rpx;
-		background-color: #5F8D4E;
+		/* background-color: #5F8D4E; */
 		height: 70rpx;
 		line-height: 70rpx;
 		text-align: center;

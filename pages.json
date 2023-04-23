@@ -10,6 +10,12 @@
 			// "style": {
 			// 	"navigationBarTitleText": "uni-app"
 			// }
+		},
+		{
+			"path": "pages/page3/index",
+			// "style": {
+			// 	"navigationBarTitleText": "uni-app"
+			// }
 		}
 	],
 	"globalStyle": {
@@ -33,7 +39,11 @@
 			},
 			{
 				"pagePath": "pages/page2/index",
-				"text": "植物"
+				"text": "商店"
+			},
+			{
+				"pagePath": "pages/page3/index",
+				"text": "花园"
 			}
 		]
 	}
