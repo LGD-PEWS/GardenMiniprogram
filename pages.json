@@ -1,18 +1,18 @@
 {
 	"pages": [{
-			"path": "pages/page1/index",
+			"path": "pages/page1/index"
 			// "style": {
 			// 	"navigationBarTitleText": "uni-app"
 			// }
 		},
 		{
-			"path": "pages/page2/index",
+			"path": "pages/page2/index"
 			// "style": {
 			// 	"navigationBarTitleText": "uni-app"
 			// }
 		},
 		{
-			"path": "pages/page3/index",
+			"path": "pages/page3/index"
 			// "style": {
 			// 	"navigationBarTitleText": "uni-app"
 			// }
@@ -23,7 +23,7 @@
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "花园计时",
 		// "navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#A4BE7B",
+		"backgroundColor": "#A4BE7B"
 		// "app-plus": {
 		// 	"background": "#BDD2B6"
 		// }

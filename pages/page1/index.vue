@@ -12,8 +12,10 @@
 				</view>
 			</uni-grid-item>
 		</uni-grid>
-		<slider :disabled="!startBtn" :value="minute" step="5" class="slider" max="120" @change="sliderChange"
+		<slider v-show="startBtn" :value="minute" step="5" class="slider" max="120" @change="sliderChange"
 			@changing="sliderChanging" activeColor="#5F8D4E" backgroundColor="#E5D9B6" block-color="#5F8D4E" />
+		<slider v-show="giveupBtn" :disabled="giveupBtn" :value="minute" class="slider" :max="finalMinute"
+			activeColor="#5F8D4E" backgroundColor="#E5D9B6" block-color="#5F8D4E" />
 		<button v-show="startBtn" class="buttonStart" type="default" plain="true" @click="start">开 始</button>
 		<button v-show="giveupBtn" class="button" type="default" plain="true" @click="giveup">放 弃</button>
 	</view>
@@ -27,6 +29,7 @@
 				speakerText: [],
 				timer: "",
 				speakerTimer: "",
+				finalMinute: 0,
 				minute: 0,
 				second: 0,
 				startBtn: true,
@@ -58,13 +61,10 @@
 				this.sliderCount++
 				if (this.sliderCount > 80) {
 					this.speakerVibrate("不要划着玩^_^")
-				} else {
+				} else if (this.startBtn) {
+					// 计时时不震动
 					// 轻微震动
-					uni.vibrateShort({
-						success: function() {
-							console.log('success');
-						}
-					});
+					uni.vibrateShort({});
 				}
 				// 植物成长
 				console.log("val", val)
@@ -100,13 +100,15 @@
 				// 显示 放弃 按钮
 				this.startBtn = false;
 				this.giveupBtn = true;
+				// 进度条初始化
+				this.minute = 0;
 				// 开始计时
 				this.timer = setInterval(() => {
-					if (this.second > 0) {
-						this.second--
-					} else if (this.second == 0 && this.minute > 0) {
-						this.minute--
-						this.second = 59
+					if (this.second < 59) {
+						this.second++
+					} else if (this.second == 59 && this.minute < this.finalMinute) {
+						this.second = 0
+						this.minute++
 					} else {
 						// 种植完成，将种植时间，植物年龄，品种 发送给页面3
 						uni.$emit('newGardenPlant', {
@@ -122,7 +124,7 @@
 						this.giveup()
 						return
 					}
-				}, 1000)
+				}, 100)
 				// 正常说话
 				this.speakerNormal()
 			},
@@ -130,7 +132,7 @@
 				clearInterval(this.timer);
 				this.giveupBtn = false;
 				this.startBtn = true;
-				this.minute = 0;
+				this.minute = this.finalMinute;
 				this.second = 0;
 				this.speakerReset()
 				clearInterval(this.speakerTimer);
@@ -142,6 +144,7 @@
 				this.sliderCount = 0
 				this.speakerReset()
 				this.minute = event.detail.value
+				this.finalMinute = event.detail.value
 			},
 			clickSpeaker: function() {
 				this.sliderCount++

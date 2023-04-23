@@ -8,6 +8,7 @@ const _sfc_main = {
       speakerText: [],
       timer: "",
       speakerTimer: "",
+      finalMinute: 0,
       minute: 0,
       second: 0,
       startBtn: true,
@@ -38,12 +39,8 @@ const _sfc_main = {
       this.sliderCount++;
       if (this.sliderCount > 80) {
         this.speakerVibrate("不要划着玩^_^");
-      } else {
-        common_vendor.index.vibrateShort({
-          success: function() {
-            console.log("success");
-          }
-        });
+      } else if (this.startBtn) {
+        common_vendor.index.vibrateShort({});
       }
       console.log("val", val);
       if (val < 40) {
@@ -75,12 +72,13 @@ const _sfc_main = {
       }
       this.startBtn = false;
       this.giveupBtn = true;
+      this.minute = 0;
       this.timer = setInterval(() => {
-        if (this.second > 0) {
-          this.second--;
-        } else if (this.second == 0 && this.minute > 0) {
-          this.minute--;
-          this.second = 59;
+        if (this.second < 59) {
+          this.second++;
+        } else if (this.second == 59 && this.minute < this.finalMinute) {
+          this.second = 0;
+          this.minute++;
         } else {
           common_vendor.index.$emit("newGardenPlant", {
             url: this.plant,
@@ -93,14 +91,14 @@ const _sfc_main = {
           this.giveup();
           return;
         }
-      }, 1e3);
+      }, 100);
       this.speakerNormal();
     },
     giveup: function() {
       clearInterval(this.timer);
       this.giveupBtn = false;
       this.startBtn = true;
-      this.minute = 0;
+      this.minute = this.finalMinute;
       this.second = 0;
       this.speakerReset();
       clearInterval(this.speakerTimer);
@@ -112,6 +110,7 @@ const _sfc_main = {
       this.sliderCount = 0;
       this.speakerReset();
       this.minute = event.detail.value;
+      this.finalMinute = event.detail.value;
     },
     clickSpeaker: function() {
       this.sliderCount++;
@@ -210,14 +209,18 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       highlight: false,
       showBorder: false
     }),
-    i: !$data.startBtn,
+    i: $data.startBtn,
     j: $data.minute,
     k: common_vendor.o((...args) => $options.sliderChange && $options.sliderChange(...args)),
     l: common_vendor.o((...args) => $options.sliderChanging && $options.sliderChanging(...args)),
-    m: $data.startBtn,
-    n: common_vendor.o((...args) => $options.start && $options.start(...args)),
-    o: $data.giveupBtn,
-    p: common_vendor.o((...args) => $options.giveup && $options.giveup(...args))
+    m: $data.giveupBtn,
+    n: $data.giveupBtn,
+    o: $data.minute,
+    p: $data.finalMinute,
+    q: $data.startBtn,
+    r: common_vendor.o((...args) => $options.start && $options.start(...args)),
+    s: $data.giveupBtn,
+    t: common_vendor.o((...args) => $options.giveup && $options.giveup(...args))
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "C:/Users/Sylvie/Documents/HBuilderProjects/miniprogram/pages/page1/index.vue"]]);

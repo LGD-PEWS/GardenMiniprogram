@@ -3,8 +3,13 @@ const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
+      sharebtn: false,
       usePlant: "0",
-      list: []
+      list: [{
+        url: "/static/plants/plant0.png",
+        time: "2023-04-23",
+        age: "120"
+      }]
     };
   },
   onLoad() {
@@ -12,6 +17,16 @@ const _sfc_main = {
       console.log("newGardenPlant", res);
       this.list.push(res);
     });
+  },
+  mounted() {
+  },
+  onShareAppMessage: function(res) {
+    return {
+      title: "赠花",
+      //分享出去的标题
+      path: "pages/page3/index"
+      //别人点击链接进来的页面及传递的参数
+    };
   },
   methods: {
     clickTree: function(e) {
@@ -21,7 +36,34 @@ const _sfc_main = {
         }
       });
       console.log("clickTree", e);
-      this.usePlant = e;
+      console.log("list", this.list);
+      this.sharebtn = true;
+      var that = this;
+      common_vendor.wx$1.showModal({
+        title: "赠花",
+        content: `种植时间：${this.list[e].time}\r
+植物年龄：${this.list[e].age}分钟`,
+        cancelText: "放回",
+        // 取消按钮的文字
+        confirmText: "赠予好友",
+        // 确认按钮的文字 
+        success: function(res) {
+          if (res.confirm) {
+            console.log("用户点击赠予");
+            common_vendor.wx$1.showShareMenu({
+              withShareTicket: true,
+              success: () => {
+                that.give(e);
+              }
+            });
+          } else if (res.cancel) {
+            console.log("用户点击放回");
+            that.sharebtn = false;
+          }
+        }
+      });
+    },
+    give: function(e) {
     }
   }
 };
@@ -57,4 +99,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "C:/Users/Sylvie/Documents/HBuilderProjects/miniprogram/pages/page3/index.vue"]]);
+_sfc_main.__runtimeHooks = 2;
 wx.createPage(MiniProgramPage);
