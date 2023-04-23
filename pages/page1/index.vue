@@ -5,14 +5,16 @@
 			<text
 				class="text">{{ minute < 10 ? '0' + minute : minute }}:{{ second < 10 ? '0' + second : second }}</text>
 		</view>
-		<view class="uni-flex uni-row">
-			<view class="tree-null"></view>
-			<view class="tree" style="boxShadow: 0 0 0 5rpx green">固定宽度
-			</view>
-			<view class="tree-null"></view>
-		</view>
-		<slider :value="minute" step="5" class="slider" max="120" @change="sliderChange" @changing="sliderChanging" />
-		<button v-show="startBtn" class="button" type="default" plain="true" @click="start">开 始</button>
+		<uni-grid :column="2" :highlight="true" :showBorder="false">
+			<uni-grid-item style="margin: auto" :index="index" :key="index">
+				<view class="grid-item-box" style="background-color: #E5D9B6;boxShadow:0 0 0 20rpx #5F8D4E;">
+					<image class="image" :src="plant" />
+				</view>
+			</uni-grid-item>
+		</uni-grid>
+		<slider :value="minute" step="5" class="slider" max="120" @change="sliderChange" @changing="sliderChanging"
+			activeColor="#5F8D4E" backgroundColor="#E5D9B6" block-color="#5F8D4E" />
+		<button v-show="startBtn" class="buttonStart" type="default" plain="true" @click="start">开 始</button>
 		<button v-show="giveupBtn" class="button" type="default" plain="true" @click="giveup">放 弃</button>
 	</view>
 </template>
@@ -33,20 +35,40 @@
 				// 电池电量检测
 				betteryIsChecked: false,
 				// 电池充电检测
-				betteryIsChargingIsChecked: false
+				betteryIsChargingIsChecked: false,
+				plantUrl: "/static/plants/plant0.png",
+				plant: "/static/plants/plant0.png"
 			}
+		},
+		onLoad() {
+			// 监听事件
+			uni.$on('useThisPlant', res => {
+				console.log("plantUrl", res.url); // =>"掘金" res即emitData携带的对象
+				this.plantUrl = res.url
+				this.plant = res.url
+			});
 		},
 		watch: {
 			minute: function(val, oldVal) {
-				// 轻微震动
-				uni.vibrateShort({
-					success: function() {
-						console.log('success');
-					}
-				});
 				this.sliderCount++
-				if (this.sliderCount > 40) {
+				if (this.sliderCount > 80) {
 					this.speakerVibrate("不要划着玩^_^")
+				} else {
+					// 轻微震动
+					uni.vibrateShort({
+						success: function() {
+							console.log('success');
+						}
+					});
+				}
+				// 植物成长
+				console.log("val", val)
+				if (val < 55) {
+					this.plant = "/static/plants/seed0.png"
+				} else if (val < 90) {
+					this.plant = "/static/plants/seed1.png"
+				} else {
+					this.plant = this.plantUrl
 				}
 			}
 		},
@@ -170,6 +192,11 @@
 </script>
 
 <style>
+	page {
+		/* 页面背景色 */
+		background-color: #A4BE7B;
+	}
+
 	.container {
 		padding: 20px;
 		font-size: 14px;
@@ -181,18 +208,18 @@
 		margin-top: 40rpx;
 		margin-bottom: 200rpx;
 		padding: 0 20rpx;
-		background-color: #ebebeb;
+		background-color: #5F8D4E;
 		height: 70rpx;
 		line-height: 70rpx;
 		text-align: center;
-		color: #777;
+		color: #E5D9B6;
 		font-size: 170rpx;
 	}
 
 	.text2 {
 		margin-bottom: 100rpx;
 		text-align: center;
-		color: #777;
+		color: #A2B29F;
 		font-size: 50rpx;
 	}
 
@@ -201,6 +228,11 @@
 		margin-bottom: 100rpx;
 	}
 
+	.buttonStart {
+		border-radius: 50px;
+		margin: 15rpx 10rpx;
+	}
+	
 	.button {
 		border-radius: 50px;
 		margin: 15rpx 10rpx;
@@ -215,37 +247,22 @@
 		flex-direction: column;
 	}
 
-	.tree {
-		margin: 15rpx 10rpx;
-		padding: 0 20rpx;
-		background-color: #ebebeb;
-		height: 70rpx;
-		line-height: 70rpx;
-		text-align: center;
-		color: #777;
-		font-size: 26rpx;
-		/*  */
-		border-radius: 5rpx;
-		width: 200rpx;
-		height: 200rpx;
-		text-align: center;
+	.grid-item-box {
+		border-radius: 50%;
+		flex: 1;
+		/* position: relative; */
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: column;
 		align-items: center;
+		justify-content: center;
+		padding: 15px 0;
+		margin: 15rpx;
 	}
 
-	.tree-null {
-		margin: 15rpx 10rpx;
-		padding: 0 20rpx;
-		/* background-color: #ebebeb; */
-		height: 70rpx;
-		line-height: 70rpx;
-		text-align: center;
-		/* color: #777; */
-		font-size: 26rpx;
-		/*  */
-		border-radius: 5rpx;
-		width: 200rpx;
-		height: 200rpx;
-		text-align: center;
-		align-items: center;
+	.image {
+		width: 120rpx;
+		height: 120rpx;
 	}
 </style>

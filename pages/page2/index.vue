@@ -1,13 +1,13 @@
 <template>
 	<view class="container">
-		<view class="uni-flex uni-row">
-			<view @click="clickTree(1)" class="text tree" :style="{boxShadow:(index == 1?' 0 0 0 5rpx green':'')}">固定宽度
-			</view>
-			<view @click="clickTree(2)" class="text tree" :style="{boxShadow:(index == 2?' 0 0 0 5rpx green':'')}">固定宽度
-			</view>
-			<view @click="clickTree(3)" class="text tree" :style="{boxShadow:(index == 3?' 0 0 0 5rpx green':'')}">固定宽度
-			</view>
-		</view>
+		<uni-grid :column="3" :highlight="true" :showBorder="false">
+			<uni-grid-item v-for="(item, index) in list" :index="index" :key="index">
+				<view @click="clickTree(index)" class="grid-item-box" style="background-color: #E5D9B6;"
+					:style="{boxShadow:(usePlant == index?' 0 0 0 5rpx #5F8D4E':'')}">
+					<image class="image" :src="item.url" />
+				</view>
+			</uni-grid-item>
+		</uni-grid>
 	</view>
 </template>
 
@@ -15,10 +15,35 @@
 	export default {
 		data() {
 			return {
-				index: "1"
+				usePlant: "0",
+				list: [{
+						url: '/static/plants/plant0.png',
+						text: 'Grid 1',
+						badge: '0',
+						type: "primary"
+					},
+					{
+						url: '/static/plants/plant1.png',
+						text: 'Grid 2',
+						badge: '1',
+						type: "success"
+					},
+				]
 			}
 		},
 		methods: {
+			// 点击时触发
+			// change(e) {
+			// 	let {
+			// 		index
+			// 	} = e.detail
+			// 	this.list[index].badge && this.list[index].badge++
+
+			// 	uni.showToast({
+			// 		title: `点击第${index+1}个宫格`,
+			// 		icon: 'none'
+			// 	})
+			// },
 			clickTree: function(e) {
 				// 轻微震动
 				uni.vibrateShort({
@@ -27,53 +52,48 @@
 					}
 				});
 				console.log("clickTree", e)
-				this.index = e;
+				this.usePlant = e;
+				uni.$emit('useThisPlant', {
+					url: `/static/plants/plant${e}.png`,
+				});
 			}
 		}
 	}
 </script>
 
 <style>
+	page {
+		/* 页面背景色 */
+		background-color: #A4BE7B;
+	}
+
+	.grid-item-box {
+		border-radius: 50%;
+		flex: 1;
+		/* position: relative; */
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 15px 0;
+		margin: 15rpx;
+	}
+
 	.container {
 		padding: 20px;
 		font-size: 14px;
 		line-height: 24px;
 	}
 
-	.tree {
-		margin: 15rpx 10rpx;
-		padding: 0 20rpx;
-		background-color: #ebebeb;
-		height: 70rpx;
-		line-height: 70rpx;
-		text-align: center;
-		color: #777;
-		font-size: 26rpx;
-		/*  */
-		border-radius: 5rpx;
-		width: 200rpx;
-		height: 200rpx;
-		text-align: center;
-		align-items: center;
+	.text {
+		font-size: 14px;
+		margin-top: 5px;
 	}
 
-	.text2 {
-		margin-bottom: 100rpx;
-		text-align: center;
-		color: #777;
-		font-size: 50rpx;
-	}
-
-	.uni-flex {
-		display: flex;
-		flex-direction: row;
-	}
-
-	.uni-row {
-		flex-direction: row;
-	}
-
-	.uni-column {
-		flex-direction: column;
+	.image {
+		width: 80rpx;
+		height: 80rpx;
 	}
 </style>

@@ -4,16 +4,16 @@
     "pages/page2/index"
   ],
   "window": {
-    "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarBackgroundColor": "#A4BE7B",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "花园计时",
+    "backgroundColor": "#A4BE7B"
   },
   "tabBar": {
-    "color": "#7A7E83",
-    "selectedColor": "#3cc51f",
-    "borderStyle": "black",
-    "backgroundColor": "#ffffff",
+    "color": "#5F8D4E",
+    "selectedColor": "#E5D9B6",
+    "borderStyle": "white",
+    "backgroundColor": "#A4BE7B",
     "list": [
       {
         "pagePath": "pages/page1/index",

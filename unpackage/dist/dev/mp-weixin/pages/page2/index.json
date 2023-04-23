@@ -1,4 +1,6 @@
 {
-  "navigationBarTitleText": "uni-app",
-  "usingComponents": {}
+  "usingComponents": {
+    "uni-grid-item": "../../uni_modules/uni-grid/components/uni-grid-item/uni-grid-item",
+    "uni-grid": "../../uni_modules/uni-grid/components/uni-grid/uni-grid"
+  }
 }

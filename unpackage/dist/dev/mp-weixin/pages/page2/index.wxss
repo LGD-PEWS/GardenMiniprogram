@@ -1,38 +1,31 @@
 
+page {
+		/* 页面背景色 */
+		background-color: #A4BE7B;
+}
+.grid-item-box {
+		border-radius: 50%;
+		flex: 1;
+		/* position: relative; */
+
+		display: flex;
+
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 15px 0;
+		margin: 15rpx;
+}
 .container {
 		padding: 20px;
 		font-size: 14px;
 		line-height: 24px;
 }
-.tree {
-		margin: 15rpx 10rpx;
-		padding: 0 20rpx;
-		background-color: #ebebeb;
-		height: 70rpx;
-		line-height: 70rpx;
-		text-align: center;
-		color: #777;
-		font-size: 26rpx;
-		/*  */
-		border-radius: 5rpx;
-		width: 200rpx;
-		height: 200rpx;
-		text-align: center;
-		align-items: center;
+.text {
+		font-size: 14px;
+		margin-top: 5px;
 }
-.text2 {
-		margin-bottom: 100rpx;
-		text-align: center;
-		color: #777;
-		font-size: 50rpx;
-}
-.uni-flex {
-		display: flex;
-		flex-direction: row;
-}
-.uni-row {
-		flex-direction: row;
-}
-.uni-column {
-		flex-direction: column;
+.image {
+		width: 80rpx;
+		height: 80rpx;
 }

@@ -16,19 +16,37 @@ const _sfc_main = {
       // 电池电量检测
       betteryIsChecked: false,
       // 电池充电检测
-      betteryIsChargingIsChecked: false
+      betteryIsChargingIsChecked: false,
+      plantUrl: "/static/plants/plant0.png",
+      plant: "/static/plants/plant0.png"
     };
+  },
+  onLoad() {
+    common_vendor.index.$on("useThisPlant", (res) => {
+      console.log("plantUrl", res.url);
+      this.plantUrl = res.url;
+      this.plant = res.url;
+    });
   },
   watch: {
     minute: function(val, oldVal) {
-      common_vendor.index.vibrateShort({
-        success: function() {
-          console.log("success");
-        }
-      });
       this.sliderCount++;
-      if (this.sliderCount > 40) {
+      if (this.sliderCount > 80) {
         this.speakerVibrate("不要划着玩^_^");
+      } else {
+        common_vendor.index.vibrateShort({
+          success: function() {
+            console.log("success");
+          }
+        });
+      }
+      console.log("val", val);
+      if (val < 55) {
+        this.plant = "/static/plants/seed0.png";
+      } else if (val < 90) {
+        this.plant = "/static/plants/seed1.png";
+      } else {
+        this.plant = this.plantUrl;
       }
     }
   },
@@ -137,19 +155,39 @@ const _sfc_main = {
     }
   }
 };
+if (!Array) {
+  const _easycom_uni_grid_item2 = common_vendor.resolveComponent("uni-grid-item");
+  const _easycom_uni_grid2 = common_vendor.resolveComponent("uni-grid");
+  (_easycom_uni_grid_item2 + _easycom_uni_grid2)();
+}
+const _easycom_uni_grid_item = () => "../../uni_modules/uni-grid/components/uni-grid-item/uni-grid-item.js";
+const _easycom_uni_grid = () => "../../uni_modules/uni-grid/components/uni-grid/uni-grid.js";
+if (!Math) {
+  (_easycom_uni_grid_item + _easycom_uni_grid)();
+}
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
     a: common_vendor.t($data.speaker),
     b: common_vendor.o((...args) => $options.clickSpeaker && $options.clickSpeaker(...args)),
     c: common_vendor.t($data.minute < 10 ? "0" + $data.minute : $data.minute),
     d: common_vendor.t($data.second < 10 ? "0" + $data.second : $data.second),
-    e: $data.minute,
-    f: common_vendor.o((...args) => $options.sliderChange && $options.sliderChange(...args)),
-    g: common_vendor.o((...args) => $options.sliderChanging && $options.sliderChanging(...args)),
-    h: $data.startBtn,
-    i: common_vendor.o((...args) => $options.start && $options.start(...args)),
-    j: $data.giveupBtn,
-    k: common_vendor.o((...args) => $options.giveup && $options.giveup(...args))
+    e: $data.plant,
+    f: _ctx.index,
+    g: common_vendor.p({
+      index: _ctx.index
+    }),
+    h: common_vendor.p({
+      column: 2,
+      highlight: true,
+      showBorder: false
+    }),
+    i: $data.minute,
+    j: common_vendor.o((...args) => $options.sliderChange && $options.sliderChange(...args)),
+    k: common_vendor.o((...args) => $options.sliderChanging && $options.sliderChanging(...args)),
+    l: $data.startBtn,
+    m: common_vendor.o((...args) => $options.start && $options.start(...args)),
+    n: $data.giveupBtn,
+    o: common_vendor.o((...args) => $options.giveup && $options.giveup(...args))
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "C:/Users/Sylvie/Documents/HBuilderProjects/miniprogram/pages/page1/index.vue"]]);
