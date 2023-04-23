@@ -41,9 +41,9 @@ const _sfc_main = {
         });
       }
       console.log("val", val);
-      if (val < 55) {
+      if (val < 40) {
         this.plant = "/static/plants/seed0.png";
-      } else if (val < 90) {
+      } else if (val < 80) {
         this.plant = "/static/plants/seed1.png";
       } else {
         this.plant = this.plantUrl;
@@ -111,7 +111,7 @@ const _sfc_main = {
         this.speaker = text;
       }
       if (typeof text == "object") {
-        this.speaker = text[Math.floor(Math.random() * text.length)];
+        this.speaker = this.random(text);
       }
       common_vendor.index.vibrateShort({});
       if (!this.startBtn) {
@@ -132,7 +132,7 @@ const _sfc_main = {
     // 正常说话
     speakerNormal: function() {
       this.speakerTimer = setInterval(() => {
-        this.speaker = this.speakerText[Math.floor(Math.random() * this.speakerText.length)];
+        this.speaker = this.random(this.speakerText);
       }, 8e3);
     },
     getBattery: function() {
@@ -152,6 +152,9 @@ const _sfc_main = {
           }
         }
       });
+    },
+    random: function(array) {
+      return array[Math.floor(Math.random() * array.length)];
     }
   }
 };
@@ -178,7 +181,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     h: common_vendor.p({
       column: 2,
-      highlight: true,
+      highlight: false,
       showBorder: false
     }),
     i: $data.minute,

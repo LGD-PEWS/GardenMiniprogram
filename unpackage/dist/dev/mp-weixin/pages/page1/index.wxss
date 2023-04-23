@@ -23,7 +23,7 @@ page {
 .text2 {
 		margin-bottom: 100rpx;
 		text-align: center;
-		color: #A2B29F;
+		color: #E5D9B6;
 		font-size: 50rpx;
 }
 .slider {

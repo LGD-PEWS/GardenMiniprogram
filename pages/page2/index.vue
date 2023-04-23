@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<uni-grid :column="3" :highlight="true" :showBorder="false">
+		<uni-grid :column="3" :highlight="false" :showBorder="false">
 			<uni-grid-item v-for="(item, index) in list" :index="index" :key="index">
 				<view @click="clickTree(index)" class="grid-item-box" style="background-color: #E5D9B6;"
 					:style="{boxShadow:(usePlant == index?' 0 0 0 5rpx #5F8D4E':'')}">

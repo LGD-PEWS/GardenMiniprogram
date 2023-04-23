@@ -5,7 +5,7 @@
 			<text
 				class="text">{{ minute < 10 ? '0' + minute : minute }}:{{ second < 10 ? '0' + second : second }}</text>
 		</view>
-		<uni-grid :column="2" :highlight="true" :showBorder="false">
+		<uni-grid :column="2" :highlight="false" :showBorder="false">
 			<uni-grid-item style="margin: auto" :index="index" :key="index">
 				<view class="grid-item-box" style="background-color: #E5D9B6;boxShadow:0 0 0 20rpx #5F8D4E;">
 					<image class="image" :src="plant" />
@@ -63,9 +63,9 @@
 				}
 				// 植物成长
 				console.log("val", val)
-				if (val < 55) {
+				if (val < 40) {
 					this.plant = "/static/plants/seed0.png"
-				} else if (val < 90) {
+				} else if (val < 80) {
 					this.plant = "/static/plants/seed1.png"
 				} else {
 					this.plant = this.plantUrl
@@ -139,18 +139,22 @@
 					this.speaker = text;
 				}
 				if (typeof text == "object") {
-					this.speaker = text[Math.floor(Math.random() * text.length)];
+					this.speaker = this.random(text);
 				}
 				// 短震动
 				uni.vibrateShort({})
 				if (!this.startBtn) {
-					// 停止说正常的话
+					// 如果在计时
+					// 重新计时3s
+					// 3s后说正常的话
 					clearInterval(this.speakerTimer);
-					// 五秒后说正常的话
 					this.speakerTimer = setTimeout(() => {
 						this.speakerNormal()
 					}, time ? time : 3000)
 				} else {
+					// 如果没在计时
+					// 重新计时3s
+					// 3s后说"开始吧"
 					clearInterval(this.speakerTimer);
 					this.speakerTimer = setTimeout(() => {
 						this.speakerReset()
@@ -164,7 +168,7 @@
 			// 正常说话
 			speakerNormal: function() {
 				this.speakerTimer = setInterval(() => {
-					this.speaker = this.speakerText[Math.floor(Math.random() * this.speakerText.length)];
+					this.speaker = this.random(this.speakerText);
 				}, 8000)
 			},
 			getBattery: function() {
@@ -186,6 +190,9 @@
 						}
 					}
 				})
+			},
+			random: function(array) {
+				return array[Math.floor(Math.random() * array.length)];
 			}
 		}
 	}
@@ -219,7 +226,7 @@
 	.text2 {
 		margin-bottom: 100rpx;
 		text-align: center;
-		color: #A2B29F;
+		color: #E5D9B6;
 		font-size: 50rpx;
 	}
 
@@ -232,7 +239,7 @@
 		border-radius: 50px;
 		margin: 15rpx 10rpx;
 	}
-	
+
 	.button {
 		border-radius: 50px;
 		margin: 15rpx 10rpx;
