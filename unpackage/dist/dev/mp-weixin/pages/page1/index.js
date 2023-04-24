@@ -91,7 +91,7 @@ const _sfc_main = {
           this.giveup();
           return;
         }
-      }, 100);
+      }, 1e3);
       this.speakerNormal();
     },
     giveup: function() {

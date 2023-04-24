@@ -18,15 +18,21 @@
     "list": [
       {
         "pagePath": "pages/page1/index",
-        "text": "主页"
+        "text": "主页",
+        "iconPath": "static/tabbar/coffee.png",
+        "selectedIconPath": "static/tabbar/sltcoffee.png"
       },
       {
         "pagePath": "pages/page2/index",
-        "text": "商店"
+        "text": "商店",
+        "iconPath": "static/tabbar/shop.png",
+        "selectedIconPath": "static/tabbar/sltshop.png"
       },
       {
         "pagePath": "pages/page3/index",
-        "text": "花园"
+        "text": "花园",
+        "iconPath": "static/tabbar/garden.png",
+        "selectedIconPath": "static/tabbar/sltgarden.png"
       }
     ]
   },

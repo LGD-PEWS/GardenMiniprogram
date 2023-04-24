@@ -1,5 +1,7 @@
 <template>
 	<view class="container">
+		<!-- <text class="goldText">{{gold}}</text> -->
+		<!-- <image src="/static/tabbar/gold.png" class="gold"></image> -->
 		<uni-grid :column="3" :highlight="false" :showBorder="false">
 			<uni-grid-item v-for="(item, index) in list" :index="index" :key="index">
 				<view @click="clickTree(index)" class="grid-item-box" style="background-color: #E5D9B6;"
@@ -87,5 +89,23 @@
 	.image {
 		width: 80rpx;
 		height: 80rpx;
+	}
+
+
+	.goldText {
+		width: 40rpx;
+		height: 40rpx;
+		position: absolute;
+		top: 10rpx;
+		right: 40rpx;
+		color: #E5D9B6;
+	}
+
+	.gold {
+		width: 40rpx;
+		height: 40rpx;
+		position: absolute;
+		top: 10rpx;
+		right: 10rpx;
 	}
 </style>

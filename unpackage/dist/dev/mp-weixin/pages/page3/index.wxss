@@ -29,3 +29,7 @@ page {
 		width: 80rpx;
 		height: 80rpx;
 }
+.buttonShare {
+		border-radius: 50px;
+		margin: 15rpx 10rpx;
+}

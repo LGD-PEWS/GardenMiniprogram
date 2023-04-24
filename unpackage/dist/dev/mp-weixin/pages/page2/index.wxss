@@ -29,3 +29,18 @@ page {
 		width: 80rpx;
 		height: 80rpx;
 }
+.goldText {
+		width: 40rpx;
+		height: 40rpx;
+		position: absolute;
+		top: 10rpx;
+		right: 40rpx;
+		color: #E5D9B6;
+}
+.gold {
+		width: 40rpx;
+		height: 40rpx;
+		position: absolute;
+		top: 10rpx;
+		right: 10rpx;
+}

@@ -4,15 +4,26 @@ const _sfc_main = {
   data() {
     return {
       sharebtn: false,
-      usePlant: "0",
+      usePlant: "-1",
       list: [{
         url: "/static/plants/plant0.png",
         time: "2023-04-23",
         age: "120"
-      }]
+      }, {
+        url: "/static/plants/plant1.png",
+        time: "2023-04-24",
+        age: "119"
+      }],
+      shareURL: "",
+      shareMessage: "",
+      e: ""
     };
   },
-  onLoad() {
+  onLoad(options) {
+    if (options.shareMessage) {
+      console.log("shareMessage", options.shareMessage);
+      this.list.push(JSON.parse(options.shareMessage));
+    }
     common_vendor.index.$on("newGardenPlant", (res) => {
       console.log("newGardenPlant", res);
       this.list.push(res);
@@ -21,49 +32,41 @@ const _sfc_main = {
   mounted() {
   },
   onShareAppMessage: function(res) {
+    this.list.splice(this.e, 1);
+    var that = this;
     return {
-      title: "赠花",
+      title: "赠了您一束花",
       //分享出去的标题
-      path: "pages/page3/index"
+      imageUrl: that.shareURL,
+      path: "pages/page3/index?shareMessage=" + that.shareMessage
       //别人点击链接进来的页面及传递的参数
     };
   },
   methods: {
-    clickTree: function(e) {
-      common_vendor.index.vibrateShort({
-        success: function() {
-          console.log("success");
-        }
-      });
-      console.log("clickTree", e);
+    longtapTree: function(e) {
+      common_vendor.index.vibrateShort({});
+      console.log("longtapTree", e);
+      this.usePlant = e;
       console.log("list", this.list);
-      this.sharebtn = true;
-      var that = this;
       common_vendor.wx$1.showModal({
-        title: "赠花",
+        title: "植物信息",
+        // TODO 以后会加种植原因（学习或休息等）
         content: `种植时间：${this.list[e].time}\r
 植物年龄：${this.list[e].age}分钟`,
-        cancelText: "放回",
-        // 取消按钮的文字
-        confirmText: "赠予好友",
+        confirmText: "我知道了",
         // 确认按钮的文字 
-        success: function(res) {
-          if (res.confirm) {
-            console.log("用户点击赠予");
-            common_vendor.wx$1.showShareMenu({
-              withShareTicket: true,
-              success: () => {
-                that.give(e);
-              }
-            });
-          } else if (res.cancel) {
-            console.log("用户点击放回");
-            that.sharebtn = false;
-          }
-        }
+        showCancel: false
       });
     },
-    give: function(e) {
+    clickTree: function(e) {
+      this.e = e;
+      common_vendor.index.vibrateShort({});
+      console.log("clickTree", e);
+      this.usePlant = e;
+      this.sharebtn = true;
+      this.shareURL = this.list[e].url;
+      this.shareMessage = JSON.stringify(this.list[e]);
+      console.log("shareMessage", this.shareMessage);
     }
   }
 };
@@ -82,11 +85,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: common_vendor.f($data.list, (item, index, i0) => {
       return {
         a: item.url,
-        b: common_vendor.o(($event) => $options.clickTree(index), index),
-        c: $data.usePlant == index ? " 0 0 0 5rpx #5F8D4E" : "",
-        d: index,
-        e: "2d5e7c41-1-" + i0 + ",2d5e7c41-0",
-        f: common_vendor.p({
+        b: common_vendor.o(($event) => $options.longtapTree(index), index),
+        c: common_vendor.o(($event) => $options.clickTree(index), index),
+        d: $data.usePlant == index ? " 0 0 0 5rpx #5F8D4E" : "",
+        e: index,
+        f: "2d5e7c41-1-" + i0 + ",2d5e7c41-0",
+        g: common_vendor.p({
           index
         })
       };
@@ -95,7 +99,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       column: 3,
       highlight: false,
       showBorder: false
-    })
+    }),
+    c: !$data.sharebtn
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "C:/Users/Sylvie/Documents/HBuilderProjects/miniprogram/pages/page3/index.vue"]]);

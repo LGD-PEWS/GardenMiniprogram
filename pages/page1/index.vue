@@ -124,7 +124,7 @@
 						this.giveup()
 						return
 					}
-				}, 100)
+				}, 1000)
 				// 正常说话
 				this.speakerNormal()
 			},
